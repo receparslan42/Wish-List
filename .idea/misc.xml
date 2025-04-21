@@ -1,0 +1,27 @@
+<project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="com.receparslan.wishlist.MainActivity viewModel$delegate" />
+    </entry_points>
+    <pattern value="com.receparslan.wishlist.ExampleUnitTest" method="addition_isCorrect" />
+    <pattern value="com.receparslan.wishlist.viewmodel.ItemViewModel" method="deleteItem" />
+    <pattern value="com.receparslan.wishlist.ExampleInstrumentedTest" />
+    <pattern value="com.receparslan.wishlist.ExampleUnitTest" />
+    <pattern value="com.receparslan.wishlist.viewmodel.ItemViewModel" method="getItem" />
+    <pattern value="com.receparslan.wishlist.viewmodel.ItemViewModel" method="insertItem" />
+    <pattern value="com.receparslan.wishlist.roomDB.InventoryDatabase" />
+    <pattern value="com.receparslan.wishlist.roomDB.ItemDAO" />
+    <pattern value="com.receparslan.wishlist.viewmodel.ItemViewModel" />
+    <pattern value="com.receparslan.wishlist.viewmodel.ItemViewModel" method="ItemViewModel" />
+    <pattern value="com.receparslan.wishlist.MainActivity" />
+    <pattern value="com.receparslan.wishlist.viewmodel.ItemViewModel" method="setItemList" />
+    <pattern value="com.receparslan.wishlist.ExampleInstrumentedTest" method="useAppContext" />
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="jbr-21" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
