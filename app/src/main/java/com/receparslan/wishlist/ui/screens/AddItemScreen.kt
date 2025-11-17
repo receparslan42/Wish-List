@@ -1,6 +1,6 @@
 package com.receparslan.wishlist.ui.screens
 
-import android.Manifest
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -10,6 +10,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -155,7 +156,11 @@ fun AddItemScreen(saveFunction: (item: Item) -> Unit) {
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic,
-                        shadow = Shadow(Color.LightGray, offset = Offset(2.5f, 5.0f), blurRadius = 3f)
+                        shadow = Shadow(
+                            Color.LightGray,
+                            offset = Offset(2.5f, 5.0f),
+                            blurRadius = 3f
+                        )
                     )
                 )
             }
@@ -172,14 +177,13 @@ fun ImagePicker(modifier: Modifier, onImageSelected: (Uri?) -> Unit) {
     val context = LocalContext.current
     val activity = LocalActivity.current
 
-    // Check the android version for the permission request
-    val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-        Manifest.permission.READ_MEDIA_IMAGES
-    else
-        Manifest.permission.READ_EXTERNAL_STORAGE
+    // Create a launcher for the new photo picker (Android 13+)
+    val pickMediaLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { selectedImageUri = it }
 
-    // Create a launcher for the gallery
-    val galleryLauncher = rememberLauncherForActivityResult(
+    // Create a launcher for the legacy gallery picker (Android 12 and below)
+    val legacyGalleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { selectedImageUri = it }
 
@@ -188,9 +192,13 @@ fun ImagePicker(modifier: Modifier, onImageSelected: (Uri?) -> Unit) {
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted)
-            galleryLauncher.launch("image/*") // Launch the gallery
+            legacyGalleryLauncher.launch("image/*") // Launch the gallery
         else
-            Toast.makeText(context, "Permission is required to access the gallery.", Toast.LENGTH_LONG)
+            Toast.makeText(
+                context,
+                "Permission is required to access the gallery.",
+                Toast.LENGTH_LONG
+            )
                 .show() // Show a toast message to inform the user
     }
 
@@ -198,16 +206,27 @@ fun ImagePicker(modifier: Modifier, onImageSelected: (Uri?) -> Unit) {
 
     Box(
         modifier = modifier.clickable {
-            if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED)
-                galleryLauncher.launch("image/*")
-            else if (activity?.shouldShowRequestPermissionRationale(permission) == true)
-                shouldShowRequest = true
+            // Handle image selection based on Android version and permission status
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                pickMediaLauncher.launch(
+                    PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        .build()
+                )
             else
-                permissionLauncher.launch(permission)
+                if (ContextCompat.checkSelfPermission(
+                        context, READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED
+                )
+                    legacyGalleryLauncher.launch("image/*")
+                else if (activity?.shouldShowRequestPermissionRationale(READ_EXTERNAL_STORAGE) == true)
+                    shouldShowRequest = true
+                else
+                    permissionLauncher.launch(READ_EXTERNAL_STORAGE)
         }
     ) {
         if (shouldShowRequest)
-            Snackbar(action = { permissionLauncher.launch(permission) }) {
+            Snackbar(action = { permissionLauncher.launch(READ_EXTERNAL_STORAGE) }) {
                 Text("Permission is required to access the gallery.")
             }
 

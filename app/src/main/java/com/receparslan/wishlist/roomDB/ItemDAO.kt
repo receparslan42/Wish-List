@@ -18,5 +18,5 @@ interface ItemDAO {
     fun getItemById(id: Int): Item?
 
     @Query("SELECT * FROM items ORDER BY name ASC")
-    fun getAllItems(): List<Item>?
+    fun getAllItems(): List<Item>
 }
