@@ -48,9 +48,9 @@ app/
 
 ## Screenshots
 
-| List Screen                                                           | Detail Screen                                                             | Add Screen                                                             |
-|-----------------------------------------------------------------------|---------------------------------------------------------------------------|------------------------------------------------------------------------|
-| <img src="screenshots/list_screen.jpg" alt="List Screen" width="250"> | <img src="screenshots/detail_screen.jpg" alt="Detail Screen" width="250"> | <img src="screenshots/detail_screen.jpg" alt="Add Screen" width="250"> |
+| List Screen                                                           | Detail Screen                                                             | Add Screen                                                          |
+|-----------------------------------------------------------------------|---------------------------------------------------------------------------|---------------------------------------------------------------------|
+| <img src="screenshots/list_screen.jpg" alt="List Screen" width="250"> | <img src="screenshots/detail_screen.jpg" alt="Detail Screen" width="250"> | <img src="screenshots/add_screen.jpg" alt="Add Screen" width="250"> |
 
 ## Getting Started
 ### Open in Android Studio (recommended)
